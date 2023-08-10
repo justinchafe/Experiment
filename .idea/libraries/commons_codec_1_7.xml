@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="commons-codec-1.7">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/experiment/commons-codec-1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/experiment/jna-3.4.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/experiment/miglayout-4.0-swing.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/experiment/platform-3.4.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/experiment/vlcj-2.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
