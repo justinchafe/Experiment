@@ -10,11 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.StringTokenizer;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -106,6 +105,7 @@ public class Experiment  {
          dm = DisplayManager.getInstance();
          try {
              loadSettings(this.getClass().getResourceAsStream("settings.txt"));
+
          }catch (IOException e) {
            dm.showError("Error Loading the file settings.txt - using Default Settings");
            DF_TIME = 3000;
@@ -1140,13 +1140,14 @@ public class Experiment  {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        System.out.println("Why nothing?");
         // Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
        // final String[] s;
        // s = args;
        // System.out.println(s);
        // System.out.println(System.getProperty("jna.library.path"));
         //System.out.println(args[0]);
-         System.out.println("jdk version:  " + System.getProperty("sun.arch.data.model") + " bits.");
+         //System.out.println("jdk version:  " + System.getProperty("sun.arch.data.model") + " bits.");
         try{
             if (System.getProperty("jna.nosys") == null) {
                 System.setProperty("jna.nosys", "true");
@@ -1162,16 +1163,34 @@ public class Experiment  {
        // NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),System.getProperty("user.dir") + "\\src\\experiment");
         try {
             java.io.File f = new java.io.File(Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+            URL url = Experiment.class.getProtectionDomain().getCodeSource().getLocation();
+            URL urlNew =  Experiment.class.getClassLoader().getResource("null");
+            System.out.println("url: " + url + '\n' + "urlNew: " +  urlNew);
            //System.out.println("HERE IS THE PATH" + f.getPath());
-           String newPath =  f.getPath().replace("\\NicolaExperiment.jar", ""); //no longer needed, we are not using JAR files.
-           newPath = newPath.trim();
-           newPath = newPath + "\\vlc";
-           System.out.println("new Path location: " + newPath);
-           NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),newPath);
+            //String newPath =  f.getPath().replace("\\NicolaExperiment.jar", ""); //no longer needed, we are not using JAR files.
+            String newPath = Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            System.out.println("newPath init: " + newPath);
+            String jarName = newPath.substring(newPath.lastIndexOf("/") + 1);
+            System.out.println("JAR Name: " + jarName);
+          //  newPath = f.getPath().replace("\\Experiment.jar", "");
+
+            if (!jarName.trim().isEmpty()) {
+                newPath = newPath.replace(jarName, "vlc");
+                newPath = newPath.trim();
+
+            }else {
+                newPath = newPath + "vlc";
+            }
+            //newPath = newPath + "\\vlc";
+            System.out.println("newpath: " + newPath);
+            System.out.println("new Path location: " + newPath);
+            NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),newPath);
         }catch (URISyntaxException e) {
+            System.out.println("URI or MalformedURL: " + e.getMessage());
             e.printStackTrace();
+
         }
-       
+       System.out.println("RuntimeUtil.getLibVlcLibraryName(): " + RuntimeUtil.getLibVlcLibraryName());
         Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
         LibXUtil.initialise();
         SwingUtilities.invokeLater(new Runnable() {
@@ -1180,9 +1199,11 @@ public class Experiment  {
                 
                 try {
                     Experiment experiment = new Experiment();
+
                 }catch (URISyntaxException e) {
-                    System.out.println("URISyntaxException");
+                    System.out.println("URISyntaxException: " + e.getMessage());
                     e.printStackTrace();
+
                 }
             }
         });
