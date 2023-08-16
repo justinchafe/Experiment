@@ -43,6 +43,7 @@ public class Experiment  {
     
     
     private Timer dfTimer, tsTimer, rwTimer, dTimer;
+    private String VIDEO_EXT;
     final String WORDLIST_FILENAME = "CSV/words.csv";
     final String INTRO_FILENAME = "HTML/intro.html";
     final String DF_TRIAL_INSTR_FILENAME  = "HTML/dfTrialInstr.html";
@@ -95,9 +96,8 @@ public class Experiment  {
     DisplayManager dm;
     private boolean tsTaskMid;
     Participant p;
-    
-    
-     public Experiment() throws URISyntaxException {
+
+   public Experiment() throws URISyntaxException {
          //Later these values will be culled from an XML or text file if possible, with these defaults if unavailable.
          
          COUNTDOWN_TEXT = "What number did you stop at?";
@@ -112,6 +112,7 @@ public class Experiment  {
            TS_TIME = 300000;
            RW_TIME = 300000;
            D_TIME = 120000;
+           VIDEO_EXT = ".wmv";
         }
          TABLE_ROW_HEIGHT = 25;
          numSpacePress = 0;
@@ -124,16 +125,17 @@ public class Experiment  {
             newPath = f.getPath();
             newPath = newPath.trim();
             System.out.println("Video path location: " + newPath);
-            SAD_MOVIE_LOCATION = newPath + "\\Video\\1.wmv";
-            HAPPY_MOVIE_LOCATION = newPath + "\\Video\\2.wmv";
+            //SAD_MOVIE_LOCATION = newPath + "\\Video\\1.wmv";
+            //HAPPY_MOVIE_LOCATION = newPath + "\\Video\\2.wmv";
+            SAD_MOVIE_LOCATION = newPath + "\\Video\\1" + VIDEO_EXT;   //edit 2023
+            HAPPY_MOVIE_LOCATION = newPath + "\\Video\\2" + VIDEO_EXT; //edit 2023
             System.out.println ("THE VIDEO LOCATIONS ARE: " + SAD_MOVIE_LOCATION + ", " + HAPPY_MOVIE_LOCATION);
         }catch (URISyntaxException e) {
             e.printStackTrace();
         }
         
-       //TEST REMOVE THIS LATER:
-      
-         
+
+        //Loading question text:
          loadVASText(this.getClass().getResourceAsStream(VAS_TEXT_FILENAME));
          ynTSText = loadYorNText(this.getClass().getResourceAsStream(YN_TS_TEXT_FILENAME), NUM_TS_YN_QUESTIONS);
          ynMovieOneText = loadYorNText(this.getClass().getResourceAsStream(YN_MOVIE_TEXT_FILENAME), NUM_MOVIE_ONE_YN_QUESTIONS);
@@ -143,11 +145,11 @@ public class Experiment  {
          movieTwoScaleText = loadScaleText(this.getClass().getResourceAsStream(MOVIE_SCALE_TEXT_FILENAME), NUM_MOVIE_TWO_SCALE_QUESTIONS );
          loadDFScaleText(this.getClass().getResourceAsStream(DF_SCALE_TEXT_FILENAME));
         
-        //REM - remove test code for getting the current working path from within a jar file, usefull for HTML/CSV/settings.txt???
+        //REM - remove test code for getting the current working path from within a jar file, useful for HTML/CSV/settings.txt???
         java.io.File f = new java.io.File(Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
         System.out.println(f.getPath());
         
-         //setup our event handlers:
+        //Setup our event handlers:
         tsTaskMid = false; //needed to let us know if we should display the midpoint instructions. 
         createTSTimerTask();
         createTSTask();
@@ -159,11 +161,12 @@ public class Experiment  {
         createDFRatingScaleTask();
         createMediaListenerTask();
 
+        //Wordlist:
         outputFile = "OUTPUT";
-       // final String q = s[0];
+        //final String q = s[0];
         list = new WordList(this.getClass().getResourceAsStream(WORDLIST_FILENAME));
-       
-        
+
+        //Set Participant:
         p = new Participant(dm.getNumber("Enter your Participant Code: ", "Please Enter Digits" ),outputFile);
         setParticipantValues();
         
@@ -187,6 +190,8 @@ public class Experiment  {
         
          dm.showError("Rand List A index: " + k + ", Rand List B index: " + j);
         */
+
+        //Set intro and show experiment:
         dm.setInstructionPanel(loadText(this.getClass().getResourceAsStream(INTRO_FILENAME)));
         dm.instrButton.setActionCommand("intro");
         dm.instrButton.addActionListener(instrButtonTask);
@@ -195,11 +200,11 @@ public class Experiment  {
         
     } 
      
-    private String loadText(InputStream stream) {
+   private String loadText(InputStream stream) {
         BufferedReader in;
-	StringBuilder sb;
-	String line;
-	try {
+	    StringBuilder sb;
+	    String line;
+	    try {
             in= new BufferedReader(new InputStreamReader(stream));
             line = null;
             sb = new StringBuilder();
@@ -208,7 +213,7 @@ public class Experiment  {
             }//end while
             in.close();
             return sb.toString();
-	}catch (IOException e) {
+	    }catch (IOException e) {
             dm.showError("Error Loading Text - using defaults");
             return "error loading!";
 	}
@@ -258,7 +263,7 @@ public class Experiment  {
 	}
     }	
 
-    private void createInstrButtonTask() {
+   private void createInstrButtonTask() {
         instrButtonTask = new ActionListener() {
             // @Override
             public void actionPerformed(ActionEvent evt) {
@@ -613,7 +618,7 @@ public class Experiment  {
                 }else if (evt.getActionCommand().equals("playMovieTwo")) {
                     dm.mediaPlayerComponent.getMediaPlayer().addMediaPlayerEventListener(mediaListen);
                     dm.showMovie(HAPPY_MOVIE_LOCATION);
-                
+
              
                 }else if (evt.getActionCommand().equals("vasButton4")) {
                     dm.clearPanel();
@@ -685,9 +690,8 @@ public class Experiment  {
              }       
         }};
     }
-    
-    
-      private void createDFTimerTask() {
+
+   private void createDFTimerTask() {
         dFTimerTask = new ActionListener() {
         // @Override
             public void actionPerformed(ActionEvent evt) {
@@ -705,8 +709,7 @@ public class Experiment  {
          };
     }
     
-    
-    private void createMediaListenerTask() {
+   private void createMediaListenerTask() {
         mediaListen = new MediaPlayerEventAdapter() {
                @Override
               public void finished(MediaPlayer mediaPlayer) {
@@ -714,7 +717,7 @@ public class Experiment  {
                    System.out.println("Nothing" + dm.mediaPlayerComponent.getMediaPlayer().getMediaMeta().getTitle());
                   
                    
-                   if (dm.mediaPlayerComponent.getMediaPlayer().getMediaMeta().getTitle().equals("1.wmv")) {
+                   if (dm.mediaPlayerComponent.getMediaPlayer().getMediaMeta().getTitle().equals("1" + VIDEO_EXT)) {  //edit 2023
                         dm.clearMovie();
                         dm.clearPanel();
                         dm.setVasPanel(NUM_VAS_QUESTIONS,vasText, loadText(this.getClass().getResourceAsStream(VAS_INSTR_FILENAME)));
@@ -722,7 +725,7 @@ public class Experiment  {
                         dm.instrButton.addActionListener(instrButtonTask);
                         dm.showPanel();
                         
-                   }else if (dm.mediaPlayerComponent.getMediaPlayer().getMediaMeta().getTitle().equals("2.wmv")) {
+                   }else if (dm.mediaPlayerComponent.getMediaPlayer().getMediaMeta().getTitle().equals("2" + VIDEO_EXT)) {  //edit 2023
                         dm.clearMovie();
                         dm.mediaPlayerComponent.release(); //SECOND VIDEO, we should release it's stuff.
                         dm.clearPanel();
@@ -735,7 +738,7 @@ public class Experiment  {
         }}; 
     }
     
-    private void createDFRatingScaleTask() {
+   private void createDFRatingScaleTask() {
         ratingScaleTask = new ActionListener() {
             
             @Override
@@ -782,10 +785,7 @@ public class Experiment  {
         };
     }
     
-    
-    
-    
-    private void createFocusTask() {
+   private void createFocusTask() {
         focusTask = new FocusListener() {
             public void focusGained(FocusEvent e) {
                 return;
@@ -796,8 +796,7 @@ public class Experiment  {
         };   
     }
     
-    
-    private final void createTSTask() {
+   private final void createTSTask() {
       class tsTask extends AbstractAction {
             public tsTask() {
                 super();
@@ -825,8 +824,7 @@ public class Experiment  {
           */
     }
     
-    
-     private void createTSTimerTask() {
+   private void createTSTimerTask() {
         tsTimerTask = new ActionListener() {
         // @Override
             public void actionPerformed(ActionEvent evt) {
@@ -891,7 +889,7 @@ public class Experiment  {
  
     }
      
-     private void createRWTimerTask() {
+   private void createRWTimerTask() {
          rwTimerTask = new ActionListener() {
              public void actionPerformed(ActionEvent evt) {
                  rwTimer.stop();
@@ -931,7 +929,7 @@ public class Experiment  {
          
     }
      
-     private void createDistractTimerTask() {
+   private void createDistractTimerTask() {
           distractTimerTask = new ActionListener() {
              public void actionPerformed(ActionEvent evt) {
                 dTimer.stop();
@@ -952,8 +950,7 @@ public class Experiment  {
         };  
      }
      
-     
-    private void loadVASText(InputStream stream) {
+   private void loadVASText(InputStream stream) {
         BufferedReader in;
 	StringTokenizer tokens;
 	String line;
@@ -991,9 +988,8 @@ public class Experiment  {
            vasText[5][1] = "EXTREMELY SPONTANEOUS";
 	}
     }	
-     
-    
-    private String[] loadYorNText(InputStream stream, int numQuestions ) {
+
+   private String[] loadYorNText(InputStream stream, int numQuestions ) {
         BufferedReader in;
 	StringTokenizer tokens;
 	String line;
@@ -1020,9 +1016,8 @@ public class Experiment  {
            return ynText;
 	}
     }	
-        
-        
- private String[][] loadScaleText(InputStream stream, int numQuestions) {
+
+   private String[][] loadScaleText(InputStream stream, int numQuestions) {
      
         BufferedReader in;
 	StringTokenizer tokens;
@@ -1057,8 +1052,8 @@ public class Experiment  {
           //LOAD DEFAULTS HERE!;
 	}
     }	
- 
- private void loadDFScaleText(InputStream stream) {
+
+   private void loadDFScaleText(InputStream stream) {
        
         BufferedReader in;
 	StringTokenizer tokens;
@@ -1089,7 +1084,7 @@ public class Experiment  {
 	}
     }
  
-    private void setParticipantValues() {
+   private void setParticipantValues() {
        
         if (p.pNum % 2 > 0) {
             tsChoice = 0; //A->AA Supress = odd
@@ -1104,7 +1099,8 @@ public class Experiment  {
      
       
     }
-    private void loadSettings(InputStream stream) throws IOException {//InputStream stream) {
+
+   private void loadSettings(InputStream stream) throws IOException {//InputStream stream) {
         BufferedReader in;
 	StringTokenizer tokens;
 	String line, currToken;
@@ -1125,6 +1121,9 @@ public class Experiment  {
             }else if (currToken.equals("D_TIME")) {
                 currToken = tokens.nextToken();
                 this.D_TIME = Integer.parseInt(currToken);
+            }else if (currToken.equals("VIDEO_EXT")) {  //edit 2023
+                currToken = tokens.nextToken();
+                this.VIDEO_EXT = currToken;
             }
                 line = null;
         }//end while
@@ -1133,9 +1132,6 @@ public class Experiment  {
      
     }
  	
-    
-    
-    
     /**
      * @param args the command line arguments
      */
@@ -1155,24 +1151,30 @@ public class Experiment  {
        }catch(IllegalStateException ise){
             System.out.println("caught :" + ise);
         }
-       
+
+        /*EDITS 2023:
         //System.out.println(System.getProperty("jna.library.path"));
         //System.out.println(System.getProperty("user.dir"));
         //System.out.println("USER DIR: " + System.getProperty("user.dir") + "\\src\\experiment");
         //NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "C:\\Program Files (x86)\\VideoLAN\\VLC" );
-       // NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),System.getProperty("user.dir") + "\\src\\experiment");
+        // NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),System.getProperty("user.dir") + "\\src\\experiment");
+        */
         try {
-            java.io.File f = new java.io.File(Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+            java.io.File f = new java.io.File(Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()); //don't need File - 2023
             URL url = Experiment.class.getProtectionDomain().getCodeSource().getLocation();
-            URL urlNew =  Experiment.class.getClassLoader().getResource("null");
+            URL urlNew =  Experiment.class.getClassLoader().getResource("null"); //NOT NEEDED - edit 2023
             System.out.println("url: " + url + '\n' + "urlNew: " +  urlNew);
-           //System.out.println("HERE IS THE PATH" + f.getPath());
+            //System.out.println("HERE IS THE PATH" + f.getPath());
             //String newPath =  f.getPath().replace("\\NicolaExperiment.jar", ""); //no longer needed, we are not using JAR files.
+
+            /*EDITS 2023:
+            Add vlc library inside/outside jar file (include directory with distribution jar).
+            */
             String newPath = Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
             System.out.println("newPath init: " + newPath);
             String jarName = newPath.substring(newPath.lastIndexOf("/") + 1);
             System.out.println("JAR Name: " + jarName);
-          //  newPath = f.getPath().replace("\\Experiment.jar", "");
+           //newPath = f.getPath().replace("\\Experiment.jar", ""); //NOT NEEDED - edit 2023
 
             if (!jarName.trim().isEmpty()) {
                 newPath = newPath.replace(jarName, "vlc");
@@ -1181,7 +1183,7 @@ public class Experiment  {
             }else {
                 newPath = newPath + "vlc";
             }
-            //newPath = newPath + "\\vlc";
+            //newPath = newPath + "\\vlc"; //REMOVE - edit 2023
             System.out.println("newpath: " + newPath);
             System.out.println("new Path location: " + newPath);
             NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),newPath);
@@ -1190,7 +1192,7 @@ public class Experiment  {
             e.printStackTrace();
 
         }
-       System.out.println("RuntimeUtil.getLibVlcLibraryName(): " + RuntimeUtil.getLibVlcLibraryName());
+        System.out.println("RuntimeUtil.getLibVlcLibraryName(): " + RuntimeUtil.getLibVlcLibraryName());
         Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
         LibXUtil.initialise();
         SwingUtilities.invokeLater(new Runnable() {
@@ -1208,9 +1210,6 @@ public class Experiment  {
             }
         });
     }//End main method
-    
-    
-    
-    
+
 }//End Experiment Class
 

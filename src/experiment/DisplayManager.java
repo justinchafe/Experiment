@@ -4,6 +4,7 @@
  */
 package experiment;
 
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -32,6 +33,7 @@ public class DisplayManager extends JFrame {
      private JEditorPane jep;
      private JPanel content;
      private JLabel dFLabel;
+     private JLabel htmlLabel;
      
      public final DefaultTableModel tableModel = new DefaultTableModel(Experiment.NUM_WORDS, 1);
      public JSlider vas;
@@ -51,6 +53,7 @@ public class DisplayManager extends JFrame {
      private int iPageFontSize; //instruction font size (HTML)
      private int iHeaderFontSize; //instruction font size above other items (HTML)
      private int dfFontSize; //the directed forgetting word font size
+
     
     Dimension dim;
      
@@ -61,7 +64,7 @@ public class DisplayManager extends JFrame {
         dim = toolkit.getScreenSize();
         content = new JPanel();
         //content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
-        content.setLayout(new MigLayout());
+        content.setLayout(new MigLayout("align 50% 50%"));
         this.setContentPane(content);
         this.setUndecorated(true); //remove decorations e.g. x in top right
         this.setAlwaysOnTop(true);
@@ -73,13 +76,13 @@ public class DisplayManager extends JFrame {
     private String createHTML(String text, int fontSize) {
           StringBuilder sb;
           sb = new StringBuilder();
-          sb.append("<html><p align = \"centre\"><font size = " + fontSize + ">" );
+          sb.append("<html><p align = \"center\"><font size = " + fontSize + ">" );
           sb.append(text);
           sb.append("</font></p></html>");
           return sb.toString();
     }
     
-    //FOR ADJUSTABLE FONT SIZES!
+    //Adjustable font sizes.
     private void setFontSizes() {
         Dimension screenSize = getCurrentResolution();
         double h = screenSize.getWidth();
@@ -108,13 +111,12 @@ public class DisplayManager extends JFrame {
         dfFontSize = 45;
         
     }
-    
-   
-   public void setFont(String fontName) {
+
+    public void setFont(String fontName) {
        font = fontName;
    } 
    
-   public Dimension getCurrentResolution() {
+    public Dimension getCurrentResolution() {
        // Get the default toolkit
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         return toolkit.getScreenSize();
@@ -130,9 +132,9 @@ public class DisplayManager extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         mediaPlayerComponent.getMediaPlayer().playMedia(filePath);
+
      }
-    
-    
+
     public void clearMovie() {
         mediaPlayerComponent.getMediaPlayer().stop();
        // mediaPlayerComponent.release(); //maybe not...
@@ -149,7 +151,7 @@ public class DisplayManager extends JFrame {
         return num;
     }
     
-     public void setTable(String header, int rHeight) {
+    public void setTable(String header, int rHeight) {
        
         table = new JTable(tableModel);
         JTableHeader th = table.getTableHeader();
@@ -160,14 +162,13 @@ public class DisplayManager extends JFrame {
         
         JScrollPane tScroll = new JScrollPane(table);
         tScroll.setMinimumSize(new Dimension(800,600));
-        content.add(tScroll, "gapleft " + (content.getWidth()/2 - tScroll.getWidth()/2));
+        content.add(tScroll, "align center");
+        //content.add(tScroll, "gapleft " + (content.getWidth()/2 - tScroll.getWidth()/2));
         validate();
-        content.add(tScroll, "gapleft " + (content.getWidth()/2 - tScroll.getWidth()/2) + ", gaptop " + (content.getHeight()/2 - tScroll.getHeight()/2));
+        //content.add(tScroll, "gapleft " + (content.getWidth()/2 - tScroll.getWidth()/2) + ", gaptop " + (content.getHeight()/2 - tScroll.getHeight()/2));
    }
      
-    
-    
-   public void setSingleVasPanel(String lowText, String highText, int length, int spacing, int minSize, int initPos) {
+    public void setSingleVasPanel(String lowText, String highText, int length, int spacing, int minSize, int initPos) {
        vas = new JSlider(JSlider.HORIZONTAL,0, length,initPos);
        vas.setMajorTickSpacing(spacing);
        vas.setPaintTicks(true);
@@ -181,7 +182,7 @@ public class DisplayManager extends JFrame {
        content.revalidate();
    }
    
-   public void setVasPanel(int numVas, String[][] lhText, String topText) {
+    public void setVasPanel(int numVas, String[][] lhText, String topText) {
        int i;
        JScrollPane scroller;
      
@@ -193,15 +194,13 @@ public class DisplayManager extends JFrame {
        vasJep.setMaximumSize(new Dimension(500,500));
        int length = 100;
        int minSize = 500;
-       
-       
+
        mVas = new JSlider[numVas];
        mainPanel = new JPanel(new MigLayout());
        instrButton = new JButton("Submit");
        
-        mainPanel.add(vasJep, "span 3, gapBottom 3%, align center, wrap");
-       
-       
+       mainPanel.add(vasJep, "span 3, gapBottom 3%, align center, wrap");
+
        for (i =0; i<mVas.length; i++) {
            mVas[i] = new JSlider(JSlider.HORIZONTAL, 0, length, 50);
            //mVas[i].setValue(50);
@@ -234,9 +233,11 @@ public class DisplayManager extends JFrame {
        scroller = new JScrollPane(mainPanel);
        scroller.setBorder(BorderFactory.createEmptyBorder());
        scroller.setMinimumSize(new Dimension(600,600));
-       content.add(scroller, "gaptop 3%, gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", align center");
-       content.validate();
-       content.add(scroller, "gaptop 3%, gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", align center");
+       //content.add(scroller, "50% 50%");
+       //content.add(scroller, "gaptop 3%, gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", align center");
+       content.add(scroller, "align center");
+        content.validate();
+      // content.add(scroller, "gaptop 3%, gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", align center");
        
      /*
        content.add(mainPanel, "gaptop " + (content.getHeight()/2 - mainPanel.getHeight()/2 ) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", align center");
@@ -247,8 +248,7 @@ public class DisplayManager extends JFrame {
        //content.setVisible(true);
        validate();
    }
-      
-      
+
     public void setDirForgetPanel(String word) {
         
         if (word == null) {
@@ -264,17 +264,18 @@ public class DisplayManager extends JFrame {
         FontMetrics met = g.getFontMetrics(dFLabel.getFont());
         int height = met.getHeight();
         int width = met.stringWidth(dFLabel.getText());
-        content.add(mainPanel, "gaptop " + (content.getHeight()/2 - height/2 ) +  ", gapleft " + (content.getWidth()/2 - width/2) + ", align center");
+        content.add(mainPanel, "align center");
+        //content.add(mainPanel, "gaptop " + (content.getHeight()/2 - height/2 ) +  ", gapleft " + (content.getWidth()/2 - width/2) + ", align center");
         //dFLabel.validate();
         //mainPanel.validate();
        // content.setVisible(true);
-        //validate();
+        validate();
   }
-    
 
-     public void setInstructionPanel(String text) {
+    public void setInstructionPanel(String text) {
         int gap = 10;
         int bGap = 5;
+       // mainPanel = new JPanel(new MigLayout()); //2023
         instrButton = new JButton("ok");
         instrButton.setMinimumSize(new Dimension(60,60));
         jep = new JEditorPane();
@@ -282,13 +283,25 @@ public class DisplayManager extends JFrame {
         jep.setEditable(false);   
         jep.setContentType("text/html");
         jep.setText(createHTML(text, iPageFontSize));
-        content.add(jep, "gaptop" + gap + "%, gapleft" + gap + "%, gapright" + gap + "%, align center, wrap"); //TODO!!!
-        content.add(instrButton, "gaptop" + bGap + "%, align center");
+      //  mainPanel.add(jep); //2023
+      //  mainPanel.add(instrButton,"align center"); //2023
+        // content.add(jep, "gaptop 3%, gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", align center"); //FAIL
+      //  content.add(jep, "gaptop" + gap + "%, gapleft" + gap + "%, gapright" + gap + "%, align center, wrap"); //TODO!!!
+      //  content.add(instrButton, "gaptop" + bGap + "%, align center");
+        content.add(jep, "align center, wrap");
+        content.add(instrButton, "align center");
+       // content.add(mainPanel,"gaptop" + (content.getHeight()/2 - mainPanel.getHeight()/2) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
+       // content.validate();
+       // content.add(mainPanel,"gaptop" + (content.getHeight()/2 - mainPanel.getHeight()/2) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
+
+        validate();
+       //Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+       // content.setLocation(dim.width/2-content.getSize().width/2, dim.height/2-content.getSize().height/2);
+
         
      }
-     
-     
-      public void setRatingScalePanel(int scaleNum, String rsLowText, String rsHighText, String ratingText) {
+
+    public void setRatingScalePanel(int scaleNum, String rsLowText, String rsHighText, String ratingText) {
         int i;
     
         mainPanel = new JPanel(new MigLayout());
@@ -309,27 +322,24 @@ public class DisplayManager extends JFrame {
         //FontMetrics met = g.getFontMetrics(ratingLabel.getFont());
         //int height = met.getHeight();
         //int width = met.stringWidth(ratingLabel.getText());
-        content.add(mainPanel, "gaptop " + (content.getHeight()/2 ) +  ", gapleft " + (content.getWidth()/2-100) + ", wrap");
+       // content.add(mainPanel, "gaptop " + (content.getHeight()/2 ) +  ", gapleft " + (content.getWidth()/2-100) + ", wrap");
+        content.add(mainPanel, "align center");
         validate();
         //This is necessary because without setPreferredSize() the main Panel has no dimensions set when not yet rendered.... 
-        content.add(mainPanel, "gaptop " + (content.getHeight()/2 - mainPanel.getHeight()/2) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
+        //content.add(mainPanel, "gaptop " + (content.getHeight()/2 - mainPanel.getHeight()/2) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
         System.out.println("the width is: " + mainPanel.getWidth()/2);
         System.out.println("the height is: " + mainPanel.getHeight()/2);
         //content.setVisible(true);
    
       }
     
-   
     public void setBlankPanel() {
          mainPanel = new JPanel();
          content.add(mainPanel);
          validate();
      }
-     
 
-     public void setSingleQuesPanel(String qText) {
-     
-         
+    public void setSingleQuesPanel(String qText) {
          mainPanel = new JPanel(new MigLayout());
          JLabel ques = new JLabel(qText);
          ques.setFont(new Font(font,1,headerFontSize));
@@ -338,15 +348,16 @@ public class DisplayManager extends JFrame {
          instrButton = new JButton("Submit");
          mainPanel.add(ques);
          mainPanel.add(getTime, "wrap");
-         mainPanel.add(instrButton, "span 2, align center"); 
-         content.add(mainPanel,"gaptop" + (content.getHeight()/2 - mainPanel.getHeight()/2) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
-         content.validate();
-         content.add(mainPanel,"gaptop" + (content.getHeight()/2 - mainPanel.getHeight()/2) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
+         mainPanel.add(instrButton, "span 2, align center");
+         content.add(mainPanel, "align center");
+        // content.add(mainPanel,"gaptop" + (content.getHeight()/2 - mainPanel.getHeight()/2) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
+         //content.validate();
+         //content.add(mainPanel,"gaptop" + (content.getHeight()/2 - mainPanel.getHeight()/2) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
          validate();
          
       }
      
-     public void setOpenEndedQuesPanel(String qText) {
+    public void setOpenEndedQuesPanel(String qText) {
         mainPanel = new JPanel(new MigLayout());
         jep = new JEditorPane();
         jep.setBackground(this.getBackground());
@@ -363,13 +374,13 @@ public class DisplayManager extends JFrame {
         mainPanel.add(jep, "wrap");
         mainPanel.add(scrollPane, "wrap");
         mainPanel.add(instrButton, "align center");
-        content.add(mainPanel,"gaptop" + (content.getHeight()/2 - mainPanel.getHeight()/2) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
-        content.validate();
-        content.add(mainPanel,"gaptop" + (content.getHeight()/2 - mainPanel.getHeight()/2) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
+        content.add(mainPanel, "align center");
+        //content.add(mainPanel,"gaptop" + (content.getHeight()/2 - mainPanel.getHeight()/2) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
+        //content.validate();
+        //content.add(mainPanel,"gaptop" + (content.getHeight()/2 - mainPanel.getHeight()/2) +  ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
         validate();      
         
      }
-     
      
     private void createRatingScale(int index, int scaleNum, String rsLowText, String rsHighText, String ratingText) {
          int i;
@@ -408,11 +419,9 @@ public class DisplayManager extends JFrame {
 
       }
     
-     
-     
-     public void setQuestionsPanel(int numQ, String[] questionText, int numS, int scaleLength, String[][] movieScaleText) { //String[][] lhText, String[] ratingText) {
+    public void setQuestionsPanel(int numQ, String[] questionText, int numS, int scaleLength, String[][] movieScaleText) { //String[][] lhText, String[] ratingText) {
          mainPanel = new JPanel(new MigLayout());
-         mainPanel.setPreferredSize(new Dimension(500,800));
+         mainPanel.setPreferredSize(new Dimension(500,500));
          String[] responses = {"Yes", "No"};
          yn = new JComboBox[numQ];
          int i;
@@ -445,38 +454,38 @@ public class DisplayManager extends JFrame {
          
         mainPanel.add(instrButton, "span, gaptop 5%, align center");
         
-        content.add(mainPanel, "gaptop 5%"  +  ", gapleft " + (content.getWidth()/2-100) + ", wrap");
+        //content.add(mainPanel, "gaptop 5%"  +  ", gapleft " + (content.getWidth()/2-100) + ", wrap");
+        content.add(mainPanel, "align center");
         revalidate();
+        content.add(mainPanel, "align center");
         //This is necessary because without setPreferredSize() the main Panel has no dimensions set when not yet rendered.... 
-        content.add(mainPanel, "gaptop 5% " + ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
+       // content.add(mainPanel, "gaptop 5% " + ", gapleft " + (content.getWidth()/2 - mainPanel.getWidth()/2) + ", wrap");
          
      }
      
-     public void clearPanel() {
+    public void clearPanel() {
         
-         content = new JPanel(new MigLayout());
+         content = new JPanel(new MigLayout("align 50% 50%"));
          this.setContentPane(content);
          content.setVisible(false);
          revalidate();
         
     }
      
-     public void showPanel() {
+    public void showPanel() {
          content.setVisible(true);
          revalidate();
      }
           
-     public void startDisplay() {
+    public void startDisplay() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(MAXIMIZED_BOTH);
         this.pack();
         this.setVisible(true);
      }
      
-     public void showError(String error) {
+    public void showError(String error) {
           JOptionPane.showMessageDialog(this, error);
      }
-     
 
-  
 }
