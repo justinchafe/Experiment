@@ -116,24 +116,38 @@ public class Experiment  {
         }
          TABLE_ROW_HEIGHT = 25;
          numSpacePress = 0;
-         
-        String newPath; 
-        
-        try {
-            java.io.File f = new java.io.File(Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-            System.out.println("HERE IS THE VIDEO PATH" + f.getPath());
-            newPath = f.getPath();
-            newPath = newPath.trim();
-            System.out.println("Video path location: " + newPath);
-            //SAD_MOVIE_LOCATION = newPath + "\\Video\\1.wmv";
-            //HAPPY_MOVIE_LOCATION = newPath + "\\Video\\2.wmv";
-            SAD_MOVIE_LOCATION = newPath + "\\Video\\1" + VIDEO_EXT;   //edit 2023
-            HAPPY_MOVIE_LOCATION = newPath + "\\Video\\2" + VIDEO_EXT; //edit 2023
-            System.out.println ("THE VIDEO LOCATIONS ARE: " + SAD_MOVIE_LOCATION + ", " + HAPPY_MOVIE_LOCATION);
-        }catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        
+
+       String filePath;
+
+       try {
+
+           /*EDITS 2023:
+           Add movie files, so that they can be accessed outside jar file, and also via editor.
+           */
+           java.io.File f = new java.io.File(Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+           System.out.println("File Path" + f.getPath());
+           filePath = f.getPath();
+           filePath = filePath.trim();
+
+           String jarName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+           System.out.println("JAR Name: " + jarName);
+
+
+           if (!jarName.trim().isEmpty() && jarName.contains(".jar")) {
+               System.out.println("video path (jar file not empty)" + f.getPath());
+               filePath = filePath.replace(jarName, "");
+               filePath = filePath.trim();
+
+           }else
+               filePath = filePath + File.separator;
+
+           System.out.println("Video path location: " +  filePath);
+           SAD_MOVIE_LOCATION =  filePath + "Video" + File.separator + "1" + VIDEO_EXT;
+           HAPPY_MOVIE_LOCATION =  filePath + "Video" + File.separator + "2" + VIDEO_EXT;
+           System.out.println ("THE VIDEO LOCATIONS ARE: " + SAD_MOVIE_LOCATION + ", " + HAPPY_MOVIE_LOCATION + "\n");
+       }catch (URISyntaxException e) {
+           e.printStackTrace();
+       }
 
         //Loading question text:
          loadVASText(this.getClass().getResourceAsStream(VAS_TEXT_FILENAME));
@@ -1020,13 +1034,12 @@ public class Experiment  {
    private String[][] loadScaleText(InputStream stream, int numQuestions) {
      
         BufferedReader in;
-	StringTokenizer tokens;
-	String line;
+	    StringTokenizer tokens;
+	    String line;
         String[][] scaleText;
         scaleText = new String[numQuestions][3];
         int i = 0;
-	try {
-           
+	    try {
             in= new BufferedReader(new InputStreamReader(stream));
             line = null;
             while ((line = in.readLine()) != null) {
@@ -1037,8 +1050,6 @@ public class Experiment  {
                     scaleText[i][2] = tokens.nextToken();
                     i++;
                 }
-              
-               
             }//end while
             in.close();
             for (i=0;i<numQuestions;i++) {
@@ -1046,64 +1057,57 @@ public class Experiment  {
             }
             return scaleText;
             
-	}catch (IOException e) {
+	    }catch (IOException e) {
            dm.showError("Error Loading Text - using defaults");
            return scaleText;
           //LOAD DEFAULTS HERE!;
-	}
+	    }
     }	
 
    private void loadDFScaleText(InputStream stream) {
-       
         BufferedReader in;
-	StringTokenizer tokens;
-	String line;
+	    StringTokenizer tokens;
+	    String line;
         int i = 0;
-	try {
+	    try {
             dfScaleText = new String[1][3];
             in= new BufferedReader(new InputStreamReader(stream));
             line = null;
             while ((line = in.readLine()) != null) {
-               tokens = new StringTokenizer(line, ",");
-               dfScaleText[0][0] = tokens.nextToken();
-               dfScaleText[0][1] = tokens.nextToken(); 
-               dfScaleText[0][2] = tokens.nextToken();
-               
-              
-               
+                tokens = new StringTokenizer(line, ",");
+                dfScaleText[0][0] = tokens.nextToken();
+                dfScaleText[0][1] = tokens.nextToken();
+                dfScaleText[0][2] = tokens.nextToken();
             }//end while
-            in.close();
-            for (i=0;i<1;i++) {
-                System.out.println("DF SCALE TEXT: " + dfScaleText[i][0] + dfScaleText[i][1] + dfScaleText[i][2]);
-            }
-	}catch (IOException e) {
+        in.close();
+        for (i=0;i<1;i++) {
+            System.out.println("DF SCALE TEXT: " + dfScaleText[i][0] + dfScaleText[i][1] + dfScaleText[i][2]);
+        }
+
+	    }catch (IOException e) {
            dm.showError("Error Loading Text - using defaults");
            dfScaleText[i][0] = "Please rate";
            dfScaleText[i][1] = "not at all characteristic of me";
            dfScaleText[i][2] = "completely characteristic of me";
-	}
+	    }
     }
  
    private void setParticipantValues() {
-       
         if (p.pNum % 2 > 0) {
             tsChoice = 0; //A->AA Supress = odd
         }else {
             tsChoice = 1;//B->BB Control = even
         }
-    
        p.addFirstList(list.currentList = getDFListOrder(this.getClass().getResourceAsStream(RAND_PNUM_FILENAME), p.pNum));
        System.out.println("List choosen was: " + list.currentList);
        //this is jsut -> p.addFirstList(list.currentList);
        //DisplayManager.getInstance().showError("The Word list used is: " + list.currentList); //for testing
-     
-      
     }
 
    private void loadSettings(InputStream stream) throws IOException {//InputStream stream) {
         BufferedReader in;
-	StringTokenizer tokens;
-	String line, currToken;
+	    StringTokenizer tokens;
+	    String line, currToken;
         in = new BufferedReader(new InputStreamReader(stream));
         line = null;
         while ((line = in.readLine()) != null) {
@@ -1129,14 +1133,12 @@ public class Experiment  {
         }//end while
 			
         in.close();
-     
     }
  	
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Why nothing?");
         // Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
        // final String[] s;
        // s = args;
@@ -1176,7 +1178,7 @@ public class Experiment  {
             System.out.println("JAR Name: " + jarName);
            //newPath = f.getPath().replace("\\Experiment.jar", ""); //NOT NEEDED - edit 2023
 
-            if (!jarName.trim().isEmpty()) {
+            if (!jarName.trim().isEmpty() && jarName.contains(".jar")) {
                 newPath = newPath.replace(jarName, "vlc");
                 newPath = newPath.trim();
 

@@ -84,19 +84,19 @@ public class DisplayManager extends JFrame {
     
     //Adjustable font sizes.
     private void setFontSizes() {
-        Dimension screenSize = getCurrentResolution();
-        double h = screenSize.getWidth();
-        if (h <= 1920 && h >= 1400) {
+        Double w = getCurrentResolution().getWidth();
+        System.out.println("Screen Width: " + w);
+        if (w >= 1920) {
             iPageFontSize = 8; //HTML Font Attribute Sizing
             iHeaderFontSize = 6;
             headerFontSize = 16;
             secFontSize = 14;
-        }else if (h <1440 && h >= 1280) {
+        }else if (w <=1440 && w > 1280) {
             iPageFontSize = 7;
             iHeaderFontSize = 5;
             headerFontSize = 14;
             secFontSize = 12;
-        }else if (h <1280 && h >= 768) {
+        }else if (w <= 1280 && w > 1024) {
             iPageFontSize = 6;
             iHeaderFontSize = 4;
             headerFontSize = 12;
