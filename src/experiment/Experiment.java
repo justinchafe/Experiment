@@ -1,30 +1,21 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package experiment;
 
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.StringTokenizer;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.runtime.x.LibXUtil;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.util.StringTokenizer;
 /**
  *
  * @author jchafe
@@ -98,8 +89,6 @@ public class Experiment  {
     Participant p;
 
    public Experiment() throws URISyntaxException {
-         //Later these values will be culled from an XML or text file if possible, with these defaults if unavailable.
-         
          COUNTDOWN_TEXT = "What number did you stop at?";
          TABLE_HEADER = "Please Enter any Words you can recall. Write one word per line: ";
          dm = DisplayManager.getInstance();
@@ -114,13 +103,12 @@ public class Experiment  {
            D_TIME = 120000;
            VIDEO_EXT = ".wmv";
         }
-         TABLE_ROW_HEIGHT = 25;
-         numSpacePress = 0;
 
-       String filePath;
+        TABLE_ROW_HEIGHT = 25;
+        numSpacePress = 0;
+        String filePath;
 
-       try {
-
+        try {
            /*EDITS 2023:
            Add movie files, so that they can be accessed outside jar file, and also via editor.
            */
@@ -134,7 +122,7 @@ public class Experiment  {
 
 
            if (!jarName.trim().isEmpty() && jarName.contains(".jar")) {
-               System.out.println("video path (jar file not empty)" + f.getPath());
+               System.out.println("Video path (jar file is not empty: )" + f.getPath());
                filePath = filePath.replace(jarName, "");
                filePath = filePath.trim();
 
@@ -144,7 +132,7 @@ public class Experiment  {
            System.out.println("Video path location: " +  filePath);
            SAD_MOVIE_LOCATION =  filePath + "Video" + File.separator + "1" + VIDEO_EXT;
            HAPPY_MOVIE_LOCATION =  filePath + "Video" + File.separator + "2" + VIDEO_EXT;
-           System.out.println ("THE VIDEO LOCATIONS ARE: " + SAD_MOVIE_LOCATION + ", " + HAPPY_MOVIE_LOCATION + "\n");
+           System.out.println ("The video locations are" + ", Sad: " + SAD_MOVIE_LOCATION + ", Happy: " + HAPPY_MOVIE_LOCATION + "\n");
        }catch (URISyntaxException e) {
            e.printStackTrace();
        }
@@ -195,13 +183,13 @@ public class Experiment  {
                randListA[k++] = i;
            }else {
                randListB[j++] = i;
-          
-               
+
+
            }
-           
-          
+
+
         }
-        
+
          dm.showError("Rand List A index: " + k + ", Rand List B index: " + j);
         */
 
@@ -245,7 +233,7 @@ public class Experiment  {
             while ((line = in.readLine()) != null) {
                 nlines++;    
                 if (Integer.parseInt(line) == pNum) {
-                        System.out.println("FOUND Participant Number: value of pNUM = " + pNum + ", value from file = " + line + "value found at position = " + nlines);
+                        System.out.println("Found Participant Number: value of pNUM = " + pNum + ", value from file = " + line + ", value found at position = " + nlines);
                         posfound = nlines;
                 }
             }
@@ -275,8 +263,13 @@ public class Experiment  {
             System.exit(1);
             return 2;
 	}
-    }	
+    }
 
+    /** 2023 edit - createInstrButtonTask() - removed excessive old commented out code.
+     * parameters: none
+     * returns: void
+     * details: acts as the controller for most of the experiment.
+     */
    private void createInstrButtonTask() {
         instrButtonTask = new ActionListener() {
             // @Override
@@ -289,106 +282,6 @@ public class Experiment  {
                     dm.instrButton.setActionCommand("vasButton1");
                     dm.instrButton.addActionListener(instrButtonTask);
                     dm.showPanel();
-                 
-                       
-                      //Load TS Instructions
-                    //    if (tsChoice == 0) {
-                      //      dm.clearPanel();
-                        //    dm.setInstructionPanel(loadText(this.getClass().getResourceAsStream(TS_INSTR_A_FILENAME)));
-                          //  dm.instrButton.setActionCommand("tsInstrA");
-                            //dm.instrButton.addActionListener(instrButtonTask);
-                           // dm.showPanel();
-                            
-                        //}else {
-                         //   dm.clearPanel();
-                          //  dm.setInstructionPanel(loadText(this.getClass().getResourceAsStream(TS_INSTR_B_FILENAME)));
-                           // dm.instrButton.setActionCommand("tsInstrB");
-                            //dm.instrButton.addActionListener(instrButtonTask);
-                            //dm.showPanel();
-                        //}
-                    
-                    //Movie question panel Code:
-                    //THIS IS OLD:
-             
-                   //String[] quesText = {"Have you seen this movie before?", "Did this clip remind you of any past experiences?"};
-                   //String[] rText = {"How much did you enjoy this film clip?", "How interested are you in watching the full movie?", "How believable did you find the main characters?"};
-                    //String lhText[][] = new String[3][2];
-                    //lhText[0][0] = "Not at all Sad";
-                    //lhText[0][1] = "Extremely Sad";
-                    //lhText[1][0] = "Not at all Curious";
-                    //lhText[1][1] = "Extremely Curious";
-                    //lhText[2][0] = "Super Sad";
-                    //lhText[2][1] = "Super Mad and Bad";
-                    
-                    //Movie Questions Code:
-                  // dm.setMovieQuestionsPanel(2, quesText, 3, 10, lhText, rText);
-                   //dm.clearPanel();
-                   //dm.setQuestionsPanel(2, ynMovieOneText, 3, 10, movieOneScaleText); //lhText, rText);
-                   //dm.instrButton.setActionCommand("movieOneQuesButton");
-                   //dm.instrButton.addActionListener(instrButtonTask);
-                   //dm.showPanel();
-                    
-                    //tsQuestionsCode:
-                    //dm.clearPanel();
-                    //dm.setQuestionsPanel(1, ynTSText, 2, 10, tsScaleText); //lhText, rText);
-                    //dm.instrButton.setActionCommand("tsQuesButton");
-                    //dm.instrButton.addActionListener(instrButtonTask);
-                    //dm.showPanel();
-                    
-                    //Open Ended Question code:
-                    //String test = "<html><font size = 40>Hello this is our question</font></html>";
-                   // dm.clearPanel();
-                    //dm.setOpenEndedQuesPanel(loadText(this.getClass().getResourceAsStream(OPEN_QUES_FILENAME)));
-                    //dm.instrButton.setActionCommand("openEndedQues");
-                    //dm.instrButton.addActionListener(instrButtonTask);
-                    //dm.showPanel();
-                    
-                    //Distraction Countdown Code:
-                    //After instructions have been shown....
-                   // dm.clearPanel();
-                    //dm.setBlankPanel();
-                   // dTimer = new Timer(D_TIME, distractTimerTask);
-                   // dm.showPanel();
-                    //dTimer.start();
-                     
-                    //TS code:
-                    //dm.clearPanel();
-                    //dm.setBlankPanel();
-                    //dm.mainPanel.addFocusListener(focusTask);
-                    //dm.mainPanel.getInputMap().put(KeyStroke.getKeyStroke("released SPACE"), "pressed");
-                    //dm.mainPanel.getActionMap().put("pressed", tsTask);
-                    //tsTimer = new Timer(TS_TIME,tsTimerTask);
-                    //tsTimer.start();
-                    //dm.showPanel();
-                    //dm.mainPanel.requestFocusInWindow(); 
-                    
-                    //Table code
-                    /*
-                    dm.clearPanel();
-                    dm.setTable(TABLE_HEADER,TABLE_ROW_HEIGHT);
-                    rwTimer = new Timer(RW_TIME,rwTimerTask);
-                    dm.showPanel();
-                    rwTimer.start();
-                   */
-                    
-                   //Slider code:
-                  
-                   //dm.setSingleVasPanel("vas low", "vas high", 100, 10, 500, 0);
-                    
-                    //dm.clearPanel();
-                    //dm.setVasPanel(6,vasText, loadText(this.getClass().getResourceAsStream(VAS_INSTR_FILENAME)));
-                    //dm.instrButton.setActionCommand("vasButton1");
-                    //dm.instrButton.addActionListener(instrButtonTask);
-                    //dm.showPanel();
-                   
-                    
-                   //DF code
-                   
-                   // dfTimer = new Timer(DF_TIME, dFTimerTask); 
-                   // dm.clearPanel();
-                   // dm.setDirForgetPanel(list.getNextWord());
-                   // dm.showPanel();
-                   // dfTimer.start();
                     
                 }else if (evt.getActionCommand().equals("vasButton1")) {
                     dm.clearPanel();
@@ -709,7 +602,6 @@ public class Experiment  {
         dFTimerTask = new ActionListener() {
         // @Override
             public void actionPerformed(ActionEvent evt) {
-                System.out.println("heartbeat");
                 dfTimer.stop();
                 dm.clearPanel();
                 dm.setRatingScalePanel(5,dfScaleText[0][1], dfScaleText[0][2], dfScaleText[0][0]);
@@ -729,8 +621,7 @@ public class Experiment  {
               public void finished(MediaPlayer mediaPlayer) {
                    System.out.println("MEDIA FINISHED EVENT FIRED");
                    System.out.println("Nothing" + dm.mediaPlayerComponent.getMediaPlayer().getMediaMeta().getTitle());
-                  
-                   
+
                    if (dm.mediaPlayerComponent.getMediaPlayer().getMediaMeta().getTitle().equals("1" + VIDEO_EXT)) {  //edit 2023
                         dm.clearMovie();
                         dm.clearPanel();
@@ -748,7 +639,6 @@ public class Experiment  {
                         dm.instrButton.addActionListener(instrButtonTask);
                         dm.showPanel();
                    }
-                       
         }}; 
     }
     
@@ -791,10 +681,7 @@ public class Experiment  {
                     dm.instrButton.setActionCommand("distractInstr");
                     dm.instrButton.addActionListener(instrButtonTask);
                     dm.showPanel();
-                }     
-                    
-               
-               
+                }
             }
         };
     }
@@ -825,7 +712,7 @@ public class Experiment  {
         }
       tsTask = new tsTask();
       
-       /* KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+       /*KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
         @Override
             public boolean dispatchKeyEvent(KeyEvent evt) {
                 System.out.println("Got key event!");
@@ -834,13 +721,13 @@ public class Experiment  {
                 }
                 return false;
                 };
-          });
-          */
+            });
+       */
     }
     
    private void createTSTimerTask() {
         tsTimerTask = new ActionListener() {
-        // @Override
+        //@Override
             public void actionPerformed(ActionEvent evt) {
                 System.out.println("heartbeat");
                 tsTimer.stop();
@@ -900,20 +787,18 @@ public class Experiment  {
                     
                 }
             }};
- 
-    }
+     }
      
    private void createRWTimerTask() {
          rwTimerTask = new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
-                 rwTimer.stop();
-                 int i;
-                 String[] rw;
-                 rw = new String[NUM_WORDS];
-                 if (dm.table.isEditing()) {
+            public void actionPerformed(ActionEvent evt) {
+                rwTimer.stop();
+                int i;
+                String[] rw;
+                rw = new String[NUM_WORDS];
+                if (dm.table.isEditing()) {
                     dm.table.getCellEditor().stopCellEditing();
-                 }
-                 
+                }
                 for (i=0;i<NUM_WORDS;i++) {
                     if (dm.table.getModel().getValueAt(i, 0) !=  null) {
                         System.out.println(dm.table.getModel().getValueAt(i, 0));
@@ -928,20 +813,9 @@ public class Experiment  {
                 dm.instrButton.setActionCommand("playMovieOne");
                 dm.instrButton.addActionListener(instrButtonTask);
                 dm.showPanel();
-                //dm.remTable();
-         //p.printRWords();
-         //System.out.println("NUMBER OF MATCHED WORDS: ");// + p.matchWords());
-        // p.addResponses();
-        // p.matchMetaphone();
-        // p.addEMatches();
-        // p.addMMatches();
-         //p.writeXmlFile();
-         //p.writeDataToFile();
-         
             }
          };
-         
-    }
+   }
      
    private void createDistractTimerTask() {
           distractTimerTask = new ActionListener() {
@@ -958,18 +832,16 @@ public class Experiment  {
                         dm.mainPanel.getComponent(i).requestFocusInWindow();
                     }
                  }
-                
          }
-         
         };  
-     }
+   }
      
    private void loadVASText(InputStream stream) {
         BufferedReader in;
-	StringTokenizer tokens;
-	String line;
+	    StringTokenizer tokens;
+	    String line;
         int i = 0;
-	try {
+    	try {
             vasText = new String[NUM_VAS_QUESTIONS][2];
             in= new BufferedReader(new InputStreamReader(stream));
             line = null;
@@ -980,12 +852,9 @@ public class Experiment  {
                     vasText[i][1] = tokens.nextToken();    
                     i++;
                 }
-              
-               
             }//end while
             in.close();
-       
-	}catch (IOException e) {
+	    }catch (IOException e) {
            dm.showError("Error Loading Text - using defaults");
            vasText = new String[6][2];
            vasText[0][0] = "NOT AT ALL SAD";
@@ -1000,7 +869,7 @@ public class Experiment  {
            vasText[4][1] = "EXTREMELY LAZY";
            vasText[5][0] = "NOT AT ALL SPONTANEOUS";
            vasText[5][1] = "EXTREMELY SPONTANEOUS";
-	}
+	    }
     }	
 
    private String[] loadYorNText(InputStream stream, int numQuestions ) {
@@ -1099,8 +968,8 @@ public class Experiment  {
             tsChoice = 1;//B->BB Control = even
         }
        p.addFirstList(list.currentList = getDFListOrder(this.getClass().getResourceAsStream(RAND_PNUM_FILENAME), p.pNum));
-       System.out.println("List choosen was: " + list.currentList);
-       //this is jsut -> p.addFirstList(list.currentList);
+       System.out.println("List chosen was: " + list.currentList);
+       //this is just -> p.addFirstList(list.currentList);
        //DisplayManager.getInstance().showError("The Word list used is: " + list.currentList); //for testing
     }
 
@@ -1139,43 +1008,22 @@ public class Experiment  {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
-       // final String[] s;
-       // s = args;
-       // System.out.println(s);
-       // System.out.println(System.getProperty("jna.library.path"));
-        //System.out.println(args[0]);
-         //System.out.println("jdk version:  " + System.getProperty("sun.arch.data.model") + " bits.");
         try{
             if (System.getProperty("jna.nosys") == null) {
                 System.setProperty("jna.nosys", "true");
             }
-       }catch(IllegalStateException ise){
+        }catch(IllegalStateException ise){
             System.out.println("caught :" + ise);
         }
 
-        /*EDITS 2023:
-        //System.out.println(System.getProperty("jna.library.path"));
-        //System.out.println(System.getProperty("user.dir"));
-        //System.out.println("USER DIR: " + System.getProperty("user.dir") + "\\src\\experiment");
-        //NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "C:\\Program Files (x86)\\VideoLAN\\VLC" );
-        // NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),System.getProperty("user.dir") + "\\src\\experiment");
-        */
         try {
-            java.io.File f = new java.io.File(Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()); //don't need File - 2023
-            URL url = Experiment.class.getProtectionDomain().getCodeSource().getLocation();
-            URL urlNew =  Experiment.class.getClassLoader().getResource("null"); //NOT NEEDED - edit 2023
-            System.out.println("url: " + url + '\n' + "urlNew: " +  urlNew);
-            //System.out.println("HERE IS THE PATH" + f.getPath());
-            //String newPath =  f.getPath().replace("\\NicolaExperiment.jar", ""); //no longer needed, we are not using JAR files.
-
             /*EDITS 2023:
             Add vlc library inside/outside jar file (include directory with distribution jar).
             */
             String newPath = Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
             System.out.println("newPath init: " + newPath);
             String jarName = newPath.substring(newPath.lastIndexOf("/") + 1);
-            System.out.println("JAR Name: " + jarName);
+            System.out.println("Jar Name: " + jarName);
            //newPath = f.getPath().replace("\\Experiment.jar", ""); //NOT NEEDED - edit 2023
 
             if (!jarName.trim().isEmpty() && jarName.contains(".jar")) {
@@ -1186,8 +1034,7 @@ public class Experiment  {
                 newPath = newPath + "vlc";
             }
             //newPath = newPath + "\\vlc"; //REMOVE - edit 2023
-            System.out.println("newpath: " + newPath);
-            System.out.println("new Path location: " + newPath);
+            System.out.println("vlc path location: " + newPath);
             NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),newPath);
         }catch (URISyntaxException e) {
             System.out.println("URI or MalformedURL: " + e.getMessage());
