@@ -46,7 +46,7 @@ public class WordList {
         //TESTING REMOVE LATER:
         String[] testWordsA = new String[20];
         loadWords(this.getClass().getResourceAsStream("CSV/wordsB.csv"),testWordsA);
-        System.out.println("DOES TESTWORDLIST B = WORDLIST B: " + testWordLists(testWordsA, wordListB));
+        System.out.println("Does TestWordList B = WordList B: " + testWordLists(testWordsA, wordListB));
         
     }  
     
