@@ -49,6 +49,7 @@ Download and install Java 8 version 1.8.0_371 JDK  (32-bit)
 * vlc folder is required
 
 
+
 #Notes
 * Video's have been edited for length/brevity.  Full clips too large for GitHub. <br>
 * Timing in the experiment has been speedup via settings.txt for testing. <br>
@@ -71,9 +72,10 @@ Download and install Java 8 version 1.8.0_371 JDK  (32-bit)
 #Usage
 * To create an executable jar file (IntelliJ):
  ```
-IntelliJ->Project STructure->Artifacts->Create Jar->Empty Jar.
-Rename to: Experiment.jar and add Mainfiest.mf (or create).
-Add .jar files.
+IntelliJ->Project STructure->Artifacts->Create Jar
+
+Existing jar file in out/artifacts/Experiment_jar/Experiment.jar
+Execute: java -jar Experiment.jar (32-bit JRE)
 
 ```
 #Data
