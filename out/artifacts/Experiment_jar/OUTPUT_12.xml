@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Participant>
+<pNum>12</pNum>
+<DFRatings>
+<listA/>
+<listB/>
+</DFRatings>
+<RWords/>
+<vasAnswers>
+<vas0>
+<vAns0>50</vAns0>
+<vAns1>50</vAns1>
+<vAns2>50</vAns2>
+<vAns3>50</vAns3>
+<vAns4>50</vAns4>
+<vAns5>50</vAns5>
+</vas0>
+</vasAnswers>
+<tsAnswers/>
+<firstList>A</firstList>
+</Participant>
