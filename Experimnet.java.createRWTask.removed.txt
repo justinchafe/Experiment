@@ -1,0 +1,36 @@
+  private void createRWTimerTask() {
+         rwTimerTask = new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                rwTimer.stop();
+                int i;
+                String[] rw;
+                rw = new String[NUM_WORDS];
+                if (dm.table.isEditing()) {
+                    dm.table.getCellEditor().stopCellEditing();
+                }
+                for (i=0;i<NUM_WORDS;i++) {
+                    if (dm.table.getModel().getValueAt(i, 0) !=  null) {
+                        System.out.println(dm.table.getModel().getValueAt(i, 0));
+                        rw[i]=dm.table.getModel().getValueAt(i,0).toString();
+                    }
+                }
+                list.setRWords(rw);
+                p.addMatches(list.matchWords(),list.matchMetaphone());
+                p.addRWords(rw);
+                dm.clearPanel();
+                dm.setInstructionPanel(loadText(this.getClass().getResourceAsStream(MOVIE_ONE_INSTR_FILENAME)));
+                dm.instrButton.setActionCommand("playMovieOne");
+                dm.instrButton.addActionListener(instrButtonTask);
+                dm.showPanel();
+                //dm.remTable();
+                //p.printRWords();
+                //System.out.println("NUMBER OF MATCHED WORDS: ");// + p.matchWords());
+                //p.addResponses();
+                //p.matchMetaphone();
+                //p.addEMatches();
+                //p.addMMatches();
+                //p.writeXmlFile();
+                //p.writeDataToFile();
+            }
+         };
+   }

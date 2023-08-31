@@ -6,7 +6,16 @@
 <listB/>
 </DFRatings>
 <RWords/>
-<vasAnswers/>
+<vasAnswers>
+<vas0>
+<vAns0>19</vAns0>
+<vAns1>76</vAns1>
+<vAns2>96</vAns2>
+<vAns3>15</vAns3>
+<vAns4>29</vAns4>
+<vAns5>81</vAns5>
+</vas0>
+</vasAnswers>
 <tsAnswers/>
 <firstList>A</firstList>
 </Participant>

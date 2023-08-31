@@ -1,0 +1,140 @@
+//FOR TESTING PARTICIPANT VALUES:
+        /*
+         int i,j,k;
+         j = k = 0;
+        int[] randListA = new int[108];
+        int[] randListB = new int[108];
+        for (i = 0; i < 216; i++) {
+           if (getDFListOrder(this.getClass().getResourceAsStream(RAND_PNUM_FILENAME),i+1) == 0) {
+               randListA[k++] = i;
+           }else {
+               randListB[j++] = i;
+
+
+           }
+
+
+        }
+
+         dm.showError("Rand List A index: " + k + ", Rand List B index: " + j);
+        */
+
+
+REMOVED FROM:
+
+   public Experiment() throws URISyntaxException {
+         //Later these values will be culled from an XML or text file if possible, with these defaults if unavailable.
+
+         COUNTDOWN_TEXT = "What number did you stop at?";
+         TABLE_HEADER = "Please Enter any Words you can recall. Write one word per line: ";
+         dm = DisplayManager.getInstance();
+         try {
+             loadSettings(this.getClass().getResourceAsStream("settings.txt"));
+
+         }catch (IOException e) {
+           dm.showError("Error Loading the file settings.txt - using Default Settings");
+           DF_TIME = 3000;
+           TS_TIME = 300000;
+           RW_TIME = 300000;
+           D_TIME = 120000;
+           VIDEO_EXT = ".wmv";
+        }
+         TABLE_ROW_HEIGHT = 25;
+         numSpacePress = 0;
+
+       String filePath;
+
+       try {
+
+           /*EDITS 2023:
+           Add movie files, so that they can be accessed outside jar file, and also via editor.
+           */
+           java.io.File f = new java.io.File(Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+           System.out.println("File Path" + f.getPath());
+           filePath = f.getPath();
+           filePath = filePath.trim();
+
+           String jarName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+           System.out.println("JAR Name: " + jarName);
+
+
+           if (!jarName.trim().isEmpty() && jarName.contains(".jar")) {
+               System.out.println("video path (jar file not empty)" + f.getPath());
+               filePath = filePath.replace(jarName, "");
+               filePath = filePath.trim();
+
+           }else
+               filePath = filePath + File.separator;
+
+           System.out.println("Video path location: " +  filePath);
+           SAD_MOVIE_LOCATION =  filePath + "Video" + File.separator + "1" + VIDEO_EXT;
+           HAPPY_MOVIE_LOCATION =  filePath + "Video" + File.separator + "2" + VIDEO_EXT;
+           System.out.println ("THE VIDEO LOCATIONS ARE: " + SAD_MOVIE_LOCATION + ", " + HAPPY_MOVIE_LOCATION + "\n");
+       }catch (URISyntaxException e) {
+           e.printStackTrace();
+       }
+
+        //Loading question text:
+         loadVASText(this.getClass().getResourceAsStream(VAS_TEXT_FILENAME));
+         ynTSText = loadYorNText(this.getClass().getResourceAsStream(YN_TS_TEXT_FILENAME), NUM_TS_YN_QUESTIONS);
+         ynMovieOneText = loadYorNText(this.getClass().getResourceAsStream(YN_MOVIE_TEXT_FILENAME), NUM_MOVIE_ONE_YN_QUESTIONS);
+         ynMovieTwoText = loadYorNText(this.getClass().getResourceAsStream(YN_MOVIE_TEXT_FILENAME), NUM_MOVIE_TWO_YN_QUESTIONS);
+         tsScaleText = loadScaleText(this.getClass().getResourceAsStream(TS_SCALE_TEXT_FILENAME), NUM_TS_SCALE_QUESTIONS);
+         movieOneScaleText = loadScaleText(this.getClass().getResourceAsStream(MOVIE_SCALE_TEXT_FILENAME),NUM_MOVIE_ONE_SCALE_QUESTIONS );
+         movieTwoScaleText = loadScaleText(this.getClass().getResourceAsStream(MOVIE_SCALE_TEXT_FILENAME), NUM_MOVIE_TWO_SCALE_QUESTIONS );
+         loadDFScaleText(this.getClass().getResourceAsStream(DF_SCALE_TEXT_FILENAME));
+
+        //REM - remove test code for getting the current working path from within a jar file, useful for HTML/CSV/settings.txt???
+        java.io.File f = new java.io.File(Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+        System.out.println(f.getPath());
+
+        //Setup our event handlers:
+        tsTaskMid = false; //needed to let us know if we should display the midpoint instructions.
+        createTSTimerTask();
+        createTSTask();
+        createDistractTimerTask();
+        createRWTimerTask();
+        createFocusTask();
+        createDFTimerTask();
+        createInstrButtonTask();
+        createDFRatingScaleTask();
+        createMediaListenerTask();
+
+        //Wordlist:
+        outputFile = "OUTPUT";
+        //final String q = s[0];
+        list = new WordList(this.getClass().getResourceAsStream(WORDLIST_FILENAME));
+
+        //Set Participant:
+        p = new Participant(dm.getNumber("Enter your Participant Code: ", "Please Enter Digits" ),outputFile);
+        setParticipantValues();
+
+        //FOR TESTING PARTICIPANT VALUES:
+        /*
+         int i,j,k;
+         j = k = 0;
+        int[] randListA = new int[108];
+        int[] randListB = new int[108];
+        for (i = 0; i < 216; i++) {
+           if (getDFListOrder(this.getClass().getResourceAsStream(RAND_PNUM_FILENAME),i+1) == 0) {
+               randListA[k++] = i;
+           }else {
+               randListB[j++] = i;
+
+
+           }
+
+
+        }
+
+         dm.showError("Rand List A index: " + k + ", Rand List B index: " + j);
+        */
+
+        //Set intro and show experiment:
+        dm.setInstructionPanel(loadText(this.getClass().getResourceAsStream(INTRO_FILENAME)));
+        dm.instrButton.setActionCommand("intro");
+        dm.instrButton.addActionListener(instrButtonTask);
+        dm.startDisplay();
+
+
+    }

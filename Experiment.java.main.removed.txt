@@ -1,0 +1,77 @@
+ public static void main(String[] args) {
+
+        /*Edit 2023 - Removed
+        // Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
+        // final String[] s;
+        // s = args;
+        // System.out.println(s);
+        // System.out.println(System.getProperty("jna.library.path"));
+        //System.out.println(args[0]);
+        //System.out.println("jdk version:  " + System.getProperty("sun.arch.data.model") + " bits.");
+        */
+
+        try{
+            if (System.getProperty("jna.nosys") == null) {
+                System.setProperty("jna.nosys", "true");
+            }
+       }catch(IllegalStateException ise){
+            System.out.println("caught :" + ise);
+        }
+
+        /*EDITS 2023 (removed):
+        //System.out.println(System.getProperty("jna.library.path"));
+        //System.out.println(System.getProperty("user.dir"));
+        //System.out.println("USER DIR: " + System.getProperty("user.dir") + "\\src\\experiment");
+        //NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "C:\\Program Files (x86)\\VideoLAN\\VLC" );
+        // NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),System.getProperty("user.dir") + "\\src\\experiment");
+        */
+
+        try {
+            //java.io.File f = new java.io.File(Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()); //don't need File - 2023
+            //URL url = Experiment.class.getProtectionDomain().getCodeSource().getLocation(); //not needed - edit 2023
+            //URL urlNew =  Experiment.class.getClassLoader().getResource("null"); //not needed - edit 2023
+            //System.out.println("Here is the initial path: " + f.getPath());
+            //String newPath =  f.getPath().replace("\\NicolaExperiment.jar", ""); //no longer needed, we are not using JAR files
+
+            /*EDITS 2023:
+            Add vlc library inside/outside jar file (include directory with distribution jar).
+            */
+            String newPath = Experiment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            System.out.println("newPath init: " + newPath);
+            String jarName = newPath.substring(newPath.lastIndexOf("/") + 1);
+            System.out.println("Jar Name: " + jarName);
+           //newPath = f.getPath().replace("\\Experiment.jar", ""); //NOT NEEDED - edit 2023
+
+            if (!jarName.trim().isEmpty() && jarName.contains(".jar")) {
+                newPath = newPath.replace(jarName, "vlc");
+                newPath = newPath.trim();
+
+            }else {
+                newPath = newPath + "vlc";
+            }
+            //newPath = newPath + "\\vlc"; //REMOVE - edit 2023
+            System.out.println("vlc path location: " + newPath);
+            NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),newPath);
+        }catch (URISyntaxException e) {
+            System.out.println("URI or MalformedURL: " + e.getMessage());
+            e.printStackTrace();
+
+        }
+        System.out.println("RuntimeUtil.getLibVlcLibraryName(): " + RuntimeUtil.getLibVlcLibraryName());
+        Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
+        LibXUtil.initialise();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    Experiment experiment = new Experiment();
+
+                }catch (URISyntaxException e) {
+                    System.out.println("URISyntaxException: " + e.getMessage());
+                    e.printStackTrace();
+
+                }
+            }
+        });
+    }//End main method

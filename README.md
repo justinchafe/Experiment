@@ -21,7 +21,7 @@
 </div>
 
 <!-- ABOUT THE PROJECT -->
-#About The Project
+### About The Project
 
 <p align="left">
 This is a computerized version of a Psychology experiment for a PhD dissertation in Psychology.
@@ -30,17 +30,17 @@ This is a computerized version of a Psychology experiment for a PhD dissertation
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-#Built With
+### Built With
 * [![Java][Java-screenshot]][Java-url] Java 8
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
-#Getting Started
+### Getting Started
 
 To get a local copy up and running follow these simple example steps.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-#Prerequisites
+### Prerequisites
 IDE used is IntelliJ_Community edition.<br>
 Download and install Java 8 version 1.8.0_371 JDK  (32-bit)
 * Compiled best against Java 8 version 1.8.0_371
@@ -48,15 +48,13 @@ Download and install Java 8 version 1.8.0_371 JDK  (32-bit)
 * Video folder is required (outside .jar file)
 * vlc folder is required
 
-
-
-#Notes
+### Notes
 * Video's have been edited for length/brevity.  Full clips too large for GitHub. <br>
 * Timing in the experiment has been speedup via settings.txt for testing. <br>
 * settings.txt can be used to change video file extension. <br>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-#Installation
+### Installation
 
 * Clone the repo
    ```sh
@@ -69,7 +67,7 @@ Download and install Java 8 version 1.8.0_371 JDK  (32-bit)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
-#Usage
+### Usage
 * To create an executable jar file (IntelliJ):
  ```
 IntelliJ->Project STructure->Artifacts->Create Jar
@@ -78,7 +76,7 @@ Existing jar file in out/artifacts/Experiment_jar/Experiment.jar
 Execute: java -jar Experiment.jar (32-bit JRE)
 
 ```
-#Data
+### Data
 Data:
 ```
 File output: 
@@ -87,7 +85,7 @@ File output:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
-#Contact
+### Contact
 
 * [Justin Chafe](https://www.linkedin.com/in/justin-chafe/) - justin.chafe@gmail.com
 * Project Link: [https://github.com/justinchafe/Experiment](https://github.com/justinchafe/wlt)
@@ -95,7 +93,7 @@ File output:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
-#Acknowledgments
+### Acknowledgments
 * <a href="https://www.oldnorthpsychology.ca/our-doctors/dr-nicola-mchale">Nicola McHale</a>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
